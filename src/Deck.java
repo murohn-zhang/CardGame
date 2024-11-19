@@ -10,7 +10,16 @@ public class Deck {
     public Deck (String[] ranks, String[] suits, int[] values) {
         cards = new ArrayList<Card>();
         // create specified cards and add to list
+        for (int i = 0; i < ranks.length; i++) {
+            for (int j = 0; j < suits.length; j++) {
+
+                Card newCard = new Card(ranks[i], suits[j], values[i]);
+                cards.add(newCard);
+            }
+        }
         // set cardsLeft to number of cards in deck and shuffle
+        cardsLeft = cards.size();
+        shuffle();
     }
 
     // isEmpty returns true when cardsLeft is 0
