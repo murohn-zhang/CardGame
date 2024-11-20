@@ -32,20 +32,28 @@ public class Deck {
         return cardsLeft;
     }
 
-    // deal: returns a randomly selected card from deck
+    // deal: returns selected card from deck
     public Card deal() {
-        Card random = new Card("jack", "hearts", 5); // placeholder
         // return null if deck is empty
-        // read problem set for more details :)
-        return random;
+        if (cardsLeft == 0){
+            return null;
+        }
+        // decrement cardsLeft and return card at index cardsLeft
+        // cardsLeft--; // ???
+        return cards.get(--cardsLeft); // ???
     }
 
     // shuffle: reorders cards in arraylist to create shuffled deck, resets cardsLeft to # of cards in deck
     public void shuffle() {
-        // basically swapping indexes of Cards in ArrayList
-        // starting at last index: (for loop)
+        for (int i = cardsLeft; i > 0; i--) {
             // pick a random num r between 0 - i
-            // swap card at i with card at r
-            // i--;
+            int random = (int) (Math.random() * i);
+            Card placeholder;
+
+            // swap card at i with card at r (???)
+            placeholder = cards.get(i);
+            cards.get(i) = cards.get(random);
+            cards.get(random) = placeholder;
+        }
     }
 }
