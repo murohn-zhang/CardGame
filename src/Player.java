@@ -8,12 +8,15 @@ public class Player {
     // constructors
     public Player (String name) {
         this.name = name;
+        hand = new ArrayList<Card>();
         points = 0;
     }
 
     public Player (String name, ArrayList<Card> hand) {
         this.name = name;
-        this.hand = hand; // can I do this???
+        for (int i = 0; i < hand.size(); i++) {
+            this.hand.add(i, hand.get(i));
+        }
     }
 
     // getter methods
