@@ -19,7 +19,7 @@ public class Player {
         }
     }
 
-    // getter methods
+    // getter methods for instance variables
     public String getName() {
         return name;
     }

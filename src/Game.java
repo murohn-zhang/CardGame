@@ -22,7 +22,6 @@ public class Game {
         deck = new Deck(ranks, suits, values);
     }
 
-    // get
     public void getPlayers() {
         System.out.println("How many players?");
         int numPlayers = input.nextInt();
