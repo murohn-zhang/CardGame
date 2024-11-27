@@ -42,8 +42,13 @@ public class Player {
         hand.add(newCard);
     }
 
+    // getCard: gets a card from inputted index from the hand
+    public Card getCard(int index) {
+        return hand.get(index);
+    }
+
     // toString
     public String toString() {
-        return name + " has " + points + "points\n" + name + "'s cards: " + hand;
+        return name + " has " + points + "points\n" + name + "'s cards: " + hand + "\n";
     }
 }

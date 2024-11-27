@@ -44,7 +44,7 @@ public class Deck {
 
     // shuffle: reorders cards in arraylist to create shuffled deck, resets cardsLeft to # of cards in deck
     public void shuffle() {
-        for (int i = cardsLeft; i > 0; i--) {
+        for (int i = cardsLeft - 1; i > 0; i--) {
             // pick a random num r between 0 - i
             int random = (int) (Math.random() * (i + 1));
             Card placeholder;
