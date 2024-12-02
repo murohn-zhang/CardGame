@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Card {
     // declare instance variables
     private String rank;
@@ -36,6 +38,20 @@ public class Card {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    // the player gets to choose if the ace card is 1 or 11
+    public void setAce(Card ace) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Do you want your Ace to hold a 1 or an 11?");
+        int choice = input.nextInt();
+        input.nextLine();
+        if (choice == 1) {
+            ace.setValue(1);
+        }
+        else if (choice == 11) {
+            ace.setValue(11);
+        }
     }
 
     // to string

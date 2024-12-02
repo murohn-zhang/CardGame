@@ -10,91 +10,184 @@ public class Game {
     Scanner input = new Scanner(System.in);
     // create deck w/ assigned values for each card
     // ace can be 1 or 11 (do this after finishing game)
-    private final String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"};
+    private final String[] ranks = {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"};
     private final String[] suits = {"Spades", "Diamonds", "Hearts", "Clubs"};
     private final int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10};
 
     // constructor
     public Game() {
-        // get player info
+        // initialize variables, shuffle deck
         players = new ArrayList<Player>();
-        getPlayers();
         deck = new Deck(ranks, suits, values);
     }
 
-    public void getPlayers() {
+    // prints instructions
+    public static void printInstructions() {
+        System.out.println("Welcome to Blackjack!\nIn this card game, it's you against the dealer. Whoever gets the closest "
+                + "to 21 (but not over) wins!\nEach player places their bet, then two cards are dealt out to them.\nYou can choose to"
+                + "either HIT (receive another card) or STAND (keep your cards as they are) ** make sure you type your choice in ALL CAPS!**\n"
+                + "If one of your cards is an Ace, you can choose whether to make that card have a value of 1 or 11. Choose wisely!\n"
+                + "If you get closer to 21 than the dealer, you get double of your bet back.\nIf you hit a Blackjack (exactly 21!), you get triple of your bet back. "
+                + "Good luck!\n");
+    }
+
+    // goes through each player
+    public void playerWork() {
+        // get number of players
         System.out.println("How many players?");
         int numPlayers = input.nextInt();
         input.nextLine();
+        // for each player:
         for (int i = 0; i < numPlayers; i++) {
+            // get their name and bet
             System.out.println("Name of Player: ");
             String name = input.nextLine();
-            Player newPlayer = new Player(name);
+            System.out.println(name + "'s  bet: ");
+            int bet = input.nextInt();
+            input.nextLine();
+            // create a new player from attained info
+            Player newPlayer = new Player(name, bet);
             players.add(newPlayer);
+            // deal out cards to the player
+            for (int j = 0; j < 2; j++) {
+                Card newCard = deck.deal();
+                System.out.println("You have a " + newCard.getRank());
+                // if they draw an Ace
+                if (newCard.getRank().equals("Ace")) {
+                    newCard.setAce(newCard);
+                }
+                // add card value to their total
+                newPlayer.addTotal(newCard.getValue());
+                // add card to their hand
+                newPlayer.addCard(newCard);
+                // print out what card they got
+            }
+            // ask if they want to hit or stand, keep on asking if they input HIT, deal card accordingly
+            String choice;
+            do {
+                System.out.println("Do you want to HIT or STAND?");
+                choice = input.nextLine();
+                // if they hit
+                if (choice.equals("HIT")) {
+                    // deal out a new card, show value
+                    Card newCard = deck.deal();
+                    System.out.println("New Card: " + newCard.getRank());
+                    // if they draw an Ace
+                    if (newCard.getRank().equals("Ace")) {
+                        newCard.setAce(newCard);
+                    }
+                    newPlayer.addTotal(newCard.getValue());
+                    newPlayer.addCard(newCard);
+                }
+            }
+            while (choice.equals("HIT"));
+
+            // print their total at the end
+            System.out.println(newPlayer.getName() + "'s total is " + newPlayer.getTotal());
+            // if it's greater than 21, set eliminated variable to true
+            if (newPlayer.getTotal() > 21) {
+                System.out.println("You BUSTED! Nice try :)");
+                newPlayer.setEliminated(true);
+            }
+            // check for blackjack
+            else if (newPlayer.getTotal() == 21) {
+                newPlayer.Blackjack();
+                System.out.println("You hit a BLACKJACK! Congrats " + name + "!");
+            }
+            System.out.println();
         }
-        // deal out cards??
     }
 
-    // print instructions
-    // each player attempts to beat dealer by getting as close to 21 as possible, without going over 21
-    // dealer class
-    public void dealerWork() { // should the dealer deal the cards? or should that be a part of the game
-        // declare new player as dealer
-        Player dealer = new Player("dealer");
-        // dealer gets two cards, find total of cards
-        int total = 0;
+    // declare new player as dealer
+    Player dealer = new Player("dealer", 0); // ????
+    public void dealerWork() {
+        // dealer gets two cards, find total of cards, add cards to dealers hand
         for (int i = 0; i < 2; i++) {
             Card newCard = deck.deal();
-            total += newCard.getValue();
+            dealer.addTotal(newCard.getValue());
             dealer.addCard(newCard);
         }
-        // print out one of dealers cards (up card)
-        Card upCard = dealer.getCard(0);
-        int upValue = upCard.getValue();
-        System.out.println("Dealer's Up Card: " + upValue);
+        int dealerTotal = dealer.getTotal();
         // if total is 17 or more, cannot draw any more cards (stand)
-        if (total >= 17) {
+        if (dealerTotal >= 17) {
             System.out.println("Dealer STANDS");
         }
         // otherwise (16 and under), they must draw a card and keep drawing until total is greater than or equal to 17
         else {
-            while (total < 17) {
+            while (dealerTotal < 17) {
                 Card newCard = deck.deal();
-                total += newCard.getValue();
+                dealerTotal += newCard.getValue();
                 dealer.addCard(newCard);
             }
-            System.out.println("Dealer's final is: " + total);
         }
+
+        // print out dealer's total
+        System.out.println("Dealer's total is: " + dealerTotal);
+        // check if dealer got blackjack
+        if (dealerTotal == 21) {
+            dealer.Blackjack();
+            System.out.println("The dealer hit a BLACKJACK!");
+        }
+        // check if the dealer is eliminated
+        else if (dealerTotal > 21) {
+            System.out.println("Dealer BUSTED");
+            dealer.setEliminated(true);
+        }
+        System.out.println(dealer.isEliminated());
     }
 
-    // play game
+    // calculate winner
+    public void findWinner() {
+        // for each player
+        for (int i = 0; i < players.size(); i++) {
+            Player current = players.get(i);
 
+            // if both aren't eliminated
+            if (!current.isEliminated() && !dealer.isEliminated()) {
+                // if the player has more points
+                if (current.getTotal() > dealer.getTotal()) {
+                    current.won();
+                    System.out.println(current.getName() + ", you beat the dealer! Your score is " + current.getPoints());
+                }
+                // if the dealer has more points
+                else if (current.getTotal() < dealer.getTotal()) {
+                    System.out.println(current.getName() + ", nice try, the dealer won! You lost your bet of " + current.getBet() + " dollars :(");
+                }
+
+                // if both hit a blackjack
+                if (current.getTotal() == 21 && dealer.getTotal() == 21) {
+                    System.out.println("Both " + current.getName() + " and the dealer hit a BLACKJACK!");
+                }
+
+                // if both have the same score
+                else if (current.getTotal() == dealer.getTotal()) {
+                    System.out.println(current.getName() + ", you tied with the dealer.");
+                }
+            }
+
+            // if one of them is eliminated
+            else if (!current.isEliminated() && dealer.isEliminated()) {
+                current.won();
+                System.out.println(current.getName() + ", you beat the dealer! Your score is " + current.getPoints());
+            }
+
+            else if (current.isEliminated() && !dealer.isEliminated()) {
+                System.out.println(current.getName() + ", nice try, the dealer won! You lost your bet of " + current.getBet() + " dollars :(");
+            }
+
+            // if both are eliminated
+            else if (current.isEliminated() && dealer.isEliminated()) {
+                System.out.println("Both " + current.getName() + " and the dealer BUSTED :(");
+            }
+        }
+    }
 
     // main
     public static void main(String[] args) {
         Game newGame = new Game();
+        printInstructions();
+        newGame.playerWork();
         newGame.dealerWork();
-//        printInstructions();
-//        playGame();
+        newGame.findWinner();
     }
-
-
 }
-// NOTES:
-// - computer is dealer (code computer section)
-// - deal 2 cards to each player
-// - each player place bet
-// - give players option of standing (no more) or hitting (deal another card)
-// if i have time:
-// - naturals
-// - splitting pairs
-// - choosing value of aces
-// - double down
-// - surrender
-
-// on the bets:
-// player places bet, then gets cards
-// if players cards get over 21 (BUST), then dealer collects bet (add to dealer's points)
-// if dealer BUSTs or has less than player
-    // player gets double of their bet if more than dealer
-    // gets triple of their bet if perfect 21 (BLACKJACK)
