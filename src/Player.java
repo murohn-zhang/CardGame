@@ -20,10 +20,11 @@ public class Player {
     }
 
     // this was part of the assignment
-    public Player (String name, ArrayList<Card> hand) {
+    public Player (String name, ArrayList<Card> subHand) {
         this.name = name;
-        for (int i = 0; i < hand.size(); i++) {
-            this.hand.add(i, hand.get(i));
+        hand = new ArrayList<Card>();
+        for (int i = 0; i < subHand.size(); i++) {
+            this.hand.add(i, subHand.get(i));
         }
     }
 

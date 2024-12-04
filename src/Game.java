@@ -45,8 +45,19 @@ public class Game {
             System.out.println(name + "'s  bet: ");
             int bet = input.nextInt();
             input.nextLine();
+
+            // tester
+//            ArrayList<Card> testHand = new ArrayList<Card>();
+//            Card testCard1 = new Card("Ace", "hearts", 11);
+//            Card testCard2 = new Card("2", "hearts", 2);
+//            testHand.add(testCard1);
+//            testHand.add(testCard2);
+
             // create a new player from attained info
             Player newPlayer = new Player(name, bet);
+            // Player newPlayer = new Player(name, testHand);
+//            newPlayer.addTotal(11);
+//            newPlayer.addTotal(2);
             players.add(newPlayer);
             // deal out cards to the player
             for (int j = 0; j < 2; j++) {
@@ -102,12 +113,11 @@ public class Game {
     Player dealer = new Player("dealer", 0); // ????
     public void dealerWork() {
         // dealer gets two cards, find total of cards, add cards to dealers hand
+        int dealerTotal = 0;
         for (int i = 0; i < 2; i++) {
             Card newCard = deck.deal();
-            dealer.addTotal(newCard.getValue());
-            dealer.addCard(newCard);
+            dealerTotal += newCard.getValue();
         }
-        int dealerTotal = dealer.getTotal();
         // if total is 17 or more, cannot draw any more cards (stand)
         if (dealerTotal >= 17) {
             System.out.println("Dealer STANDS");
@@ -117,7 +127,6 @@ public class Game {
             while (dealerTotal < 17) {
                 Card newCard = deck.deal();
                 dealerTotal += newCard.getValue();
-                dealer.addCard(newCard);
             }
         }
 
@@ -140,6 +149,7 @@ public class Game {
     public void findWinner() {
         // for each player
         for (int i = 0; i < players.size(); i++) {
+            // Player current = players.get(i);
             Player current = players.get(i);
 
             // if both aren't eliminated
