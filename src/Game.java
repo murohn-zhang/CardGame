@@ -46,18 +46,8 @@ public class Game {
             int bet = input.nextInt();
             input.nextLine();
 
-            // tester
-//            ArrayList<Card> testHand = new ArrayList<Card>();
-//            Card testCard1 = new Card("Ace", "hearts", 11);
-//            Card testCard2 = new Card("2", "hearts", 2);
-//            testHand.add(testCard1);
-//            testHand.add(testCard2);
-
             // create a new player from attained info
             Player newPlayer = new Player(name, bet);
-            // Player newPlayer = new Player(name, testHand);
-//            newPlayer.addTotal(11);
-//            newPlayer.addTotal(2);
             players.add(newPlayer);
             // deal out cards to the player
             for (int j = 0; j < 2; j++) {
@@ -118,15 +108,10 @@ public class Game {
             dealerTotal += newCard.getValue();
         }
         // if total is 17 or more, cannot draw any more cards (stand)
-        if (dealerTotal >= 17) {
-            System.out.println("Dealer STANDS");
-        }
         // otherwise (16 and under), they must draw a card and keep drawing until total is greater than or equal to 17
-        else {
-            while (dealerTotal < 17) {
-                Card newCard = deck.deal();
-                dealerTotal += newCard.getValue();
-            }
+        while (dealerTotal < 17) {
+            Card newCard = deck.deal();
+            dealerTotal += newCard.getValue();
         }
 
         // print out dealer's total
@@ -141,7 +126,6 @@ public class Game {
             System.out.println("Dealer BUSTED");
             dealer.setEliminated(true);
         }
-        System.out.println(dealer.isEliminated());
     }
 
     // calculate winner
@@ -152,19 +136,17 @@ public class Game {
             currentTotal = current.getTotal();
             // if both aren't eliminated
             if (!current.isEliminated() && !dealer.isEliminated()) {
-                // debugging, checking if values are right
-                System.out.println("player: " + currentTotal + " player points: " + current.getPoints() + ", dealer: " + dealerTotal);
 
-                // if both hit a blackjack THIS DOESN'T WORK
+                // if both hit a blackjack
                 if (currentTotal == 21 && dealerTotal == 21) {
                     System.out.println("Both " + current.getName() + " and the dealer hit a BLACKJACK!");
                     System.out.println(current.getName() + ", your score is " + current.getPoints());
                 }
                 // if both have the same score
-                else if (current.getTotal() == dealer.getTotal()) {
+                else if (currentTotal == dealerTotal) {
                     System.out.println(current.getName() + ", you tied with the dealer.");
                 }
-                // if the dealer has more points  THIS DOESN'T WORK
+                // if the dealer has more points
                 else if (currentTotal < dealerTotal) {
                     System.out.println(current.getName() + ", nice try, the dealer won! You lost your bet of " + current.getBet() + " dollars :(");
                 }
@@ -179,7 +161,7 @@ public class Game {
                 }
             }
 
-            // if one of them is eliminated THIS WORKS
+            // if one of them is eliminated
             else if (!current.isEliminated() && dealer.isEliminated()) {
                 current.won();
                 System.out.println(current.getName() + ", you beat the dealer! Your score is " + current.getPoints());
@@ -189,7 +171,7 @@ public class Game {
                 System.out.println(current.getName() + ", nice try, the dealer won! You lost your bet of " + current.getBet() + " dollars :(");
             }
 
-            // if both are eliminated THIS WORKS
+            // if both are eliminated
             else if (current.isEliminated() && dealer.isEliminated()) {
                 System.out.println("Both " + current.getName() + " and the dealer BUSTED :(");
             }
