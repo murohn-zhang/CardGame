@@ -102,7 +102,6 @@ public class Game {
             }
             // check for blackjack
             else if (newPlayer.getTotal() == 21) {
-                newPlayer.Blackjack();
                 System.out.println("You hit a BLACKJACK! Congrats " + name + "!");
             }
             System.out.println();
@@ -110,10 +109,10 @@ public class Game {
     }
 
     // declare new player as dealer
-    Player dealer = new Player("dealer", 0); // ????
+    Player dealer = new Player("dealer", 0);
+    int dealerTotal = 0; // ????
     public void dealerWork() {
         // dealer gets two cards, find total of cards, add cards to dealers hand
-        int dealerTotal = 0;
         for (int i = 0; i < 2; i++) {
             Card newCard = deck.deal();
             dealerTotal += newCard.getValue();
@@ -148,34 +147,39 @@ public class Game {
     // calculate winner
     public void findWinner() {
         // for each player
-        for (int i = 0; i < players.size(); i++) {
-            // Player current = players.get(i);
-            Player current = players.get(i);
-
+        int currentTotal;
+        for (Player current: players) {
+            currentTotal = current.getTotal();
             // if both aren't eliminated
             if (!current.isEliminated() && !dealer.isEliminated()) {
-                // if the player has more points
-                if (current.getTotal() > dealer.getTotal()) {
-                    current.won();
-                    System.out.println(current.getName() + ", you beat the dealer! Your score is " + current.getPoints());
-                }
-                // if the dealer has more points
-                else if (current.getTotal() < dealer.getTotal()) {
-                    System.out.println(current.getName() + ", nice try, the dealer won! You lost your bet of " + current.getBet() + " dollars :(");
-                }
+                // debugging, checking if values are right
+                System.out.println("player: " + currentTotal + " player points: " + current.getPoints() + ", dealer: " + dealerTotal);
 
-                // if both hit a blackjack
-                if (current.getTotal() == 21 && dealer.getTotal() == 21) {
+                // if both hit a blackjack THIS DOESN'T WORK
+                if (currentTotal == 21 && dealerTotal == 21) {
                     System.out.println("Both " + current.getName() + " and the dealer hit a BLACKJACK!");
+                    System.out.println(current.getName() + ", your score is " + current.getPoints());
                 }
-
                 // if both have the same score
                 else if (current.getTotal() == dealer.getTotal()) {
                     System.out.println(current.getName() + ", you tied with the dealer.");
                 }
+                // if the dealer has more points  THIS DOESN'T WORK
+                else if (currentTotal < dealerTotal) {
+                    System.out.println(current.getName() + ", nice try, the dealer won! You lost your bet of " + current.getBet() + " dollars :(");
+                }
+                // if the player has more points
+                else if (currentTotal > dealerTotal) {
+                    current.won();
+                    if (currentTotal == 21)
+                    {
+                        current.Blackjack();
+                    }
+                    System.out.println(current.getName() + ", you beat the dealer! Your score is " + current.getPoints());
+                }
             }
 
-            // if one of them is eliminated
+            // if one of them is eliminated THIS WORKS
             else if (!current.isEliminated() && dealer.isEliminated()) {
                 current.won();
                 System.out.println(current.getName() + ", you beat the dealer! Your score is " + current.getPoints());
@@ -185,7 +189,7 @@ public class Game {
                 System.out.println(current.getName() + ", nice try, the dealer won! You lost your bet of " + current.getBet() + " dollars :(");
             }
 
-            // if both are eliminated
+            // if both are eliminated THIS WORKS
             else if (current.isEliminated() && dealer.isEliminated()) {
                 System.out.println("Both " + current.getName() + " and the dealer BUSTED :(");
             }

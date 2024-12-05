@@ -14,7 +14,7 @@ public class Player {
         this.name = name;
         hand = new ArrayList<Card>();
         this.bet = bet;
-        points = 0;
+        points = bet;
         total = 0;
         eliminated = false;
     }
