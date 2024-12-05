@@ -26,6 +26,7 @@ public class Game {
         System.out.println("Welcome to Blackjack!\nIn this card game, it's you against the dealer. Whoever gets the closest "
                 + "to 21 (but not over) wins!\nEach player places their bet, then two cards are dealt out to them.\nYou can choose to"
                 + "either HIT (receive another card) or STAND (keep your cards as they are) ** make sure you type your choice in ALL CAPS!**\n"
+                + "All the royals (Jacks, Queens, Kings) are worth 10.\n"
                 + "If one of your cards is an Ace, you can choose whether to make that card have a value of 1 or 11. Choose wisely!\n"
                 + "If you get closer to 21 than the dealer, you get double of your bet back.\nIf you hit a Blackjack (exactly 21!), you get triple of your bet back. "
                 + "Good luck!\n");
