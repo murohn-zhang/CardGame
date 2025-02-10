@@ -1,19 +1,26 @@
+import javax.swing.*;
+import java.awt.*;
 import java.util.Scanner;
 
 public class Card {
-    // declare instance variables
+    // Declare instance variables
     private String rank;
     private String suit;
     private int value;
+    private GameView window;
+    private Image face;
 
-    // constructor
-    public Card(String rank, String suit, int value) {
+    // Constructor
+    public Card(String rank, String suit, int value, GameView window, int cardNum) {
         this.rank = rank;
         this.suit = suit;
         this.value = value;
+        this.window = window;
+        face = new ImageIcon("Resources/" + cardNum + ".png").getImage();
+
     }
 
-    // getter and setter for rank
+    // Getter and setter for rank
     public String getRank() {
         return rank;
     }
@@ -22,7 +29,7 @@ public class Card {
         this.rank = rank;
     }
 
-    // getter and setter for suit
+    // Getter and setter for suit
     public String getSuit() {
         return suit;
     }
@@ -31,7 +38,7 @@ public class Card {
         this.suit = suit;
     }
 
-    // getter and setter for value
+    // Getter and setter for value
     public int getValue() {
         return value;
     }
@@ -40,7 +47,7 @@ public class Card {
         this.value = value;
     }
 
-    // the player gets to choose if the ace card is 1 or 11
+    // The player gets to choose if the ace card is 1 or 11
     public void setAce(Card ace) {
         Scanner input = new Scanner(System.in);
         System.out.println("Do you want your Ace to hold a 1 or an 11?");
@@ -53,6 +60,14 @@ public class Card {
             ace.setValue(11);
         }
     }
+
+    // Have the card draw itself
+    public void draw(Graphics g) {
+        g.drawImage(face, 500, 500, 100, 300, window);
+    }
+
+
+
 
     // to string
     @Override
