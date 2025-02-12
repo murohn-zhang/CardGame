@@ -9,6 +9,8 @@ public class Card {
     private int value;
     private GameView window;
     private Image face;
+    public int xLoc;
+    public int yLoc;
 
     // Constructor
     public Card(String rank, String suit, int value, GameView window, int cardNum) {
@@ -16,7 +18,8 @@ public class Card {
         this.suit = suit;
         this.value = value;
         this.window = window;
-        face = new ImageIcon("Resources/" + cardNum + ".png").getImage();
+        face = new ImageIcon("Resources/Cards/" + cardNum + ".png").getImage();
+        // x and y loc should be defined in game and passed in, depends on how and when card is made
 
     }
 
@@ -63,7 +66,7 @@ public class Card {
 
     // Have the card draw itself
     public void draw(Graphics g) {
-        g.drawImage(face, 500, 500, 100, 300, window);
+        g.drawImage(face, 500, 500, 250, 350, window);
     }
 
 

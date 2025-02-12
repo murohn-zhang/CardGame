@@ -21,7 +21,13 @@ public class Game {
         players = new ArrayList<Player>();
         window = new GameView(this);
         deck = new Deck(ranks, suits, values, window);
+        window.repaint();
 
+    }
+
+    // Getter for deck
+    public Deck getCards() {
+        return deck;
     }
 
     // Prints instructions

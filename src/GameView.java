@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class GameView extends JFrame {
     private Game game;
@@ -15,7 +16,9 @@ public class GameView extends JFrame {
         this.setVisible(true);
     }
 
-//    private void paint() {
-//        game.getCards()
-//    }
+    public void paint(Graphics g) {
+        Deck deck = game.getCards();
+        deck.deal().draw(g);
+
+    }
 }
