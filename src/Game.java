@@ -9,6 +9,7 @@ public class Game {
     private GameView window;
     private Player dealer;
     private int dealerTotal;
+    private int state;
 
     Scanner input = new Scanner(System.in);
     // Create deck w/ assigned values for each card
@@ -21,6 +22,7 @@ public class Game {
     public Game() {
         // Initialize variables, shuffle deck
         players = new ArrayList<Player>();
+        state = 1;
         window = new GameView(this);
         deck = new Deck(ranks, suits, values, window);
         // Declare new player as dealer
@@ -36,7 +38,7 @@ public class Game {
     }
 
     // Prints instructions
-    public static void printInstructions() {
+    public void printInstructions() {
         System.out.println("Welcome to Blackjack!\nIn this card game, it's you against the dealer. Whoever gets the closest "
                 + "to 21 (but not over) wins!\nEach player places their bet, then two cards are dealt out to them.\nYou can choose to"
                 + "either HIT (receive another card) or STAND (keep your cards as they are) ** make sure you type your choice in ALL CAPS!**\n"
@@ -145,6 +147,7 @@ public class Game {
 
     // Calculate winner
     public void findWinner() {
+        state = 3;
         // For each player
         int currentTotal;
         for (Player current: players) {
@@ -195,9 +198,12 @@ public class Game {
 
     // Function to play game
     public void playGame() {
+        state = 1;
         printInstructions();
+        state = 2;
         playerWork();
         dealerWork();
+        state = 3;
         findWinner();
     }
 
