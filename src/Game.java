@@ -7,6 +7,8 @@ public class Game {
     private Deck deck;
     private ArrayList<Player> players;
     private GameView window;
+    private Player dealer;
+    private int dealerTotal;
 
     Scanner input = new Scanner(System.in);
     // Create deck w/ assigned values for each card
@@ -21,6 +23,9 @@ public class Game {
         players = new ArrayList<Player>();
         window = new GameView(this);
         deck = new Deck(ranks, suits, values, window);
+        // Declare new player as dealer
+        dealer = new Player("dealer", 0);
+        dealerTotal = 0;
         window.repaint();
 
     }
@@ -39,6 +44,24 @@ public class Game {
                 + "If one of your cards is an Ace, you can choose whether to make that card have a value of 1 or 11. Choose wisely!\n"
                 + "If you get closer to 21 than the dealer, you get double of your bet back.\nIf you hit a Blackjack (exactly 21!), you get triple of your bet back. "
                 + "Good luck!\n");
+    }
+
+    // Draw cards
+    public void drawCard(Player newPlayer, int check) {
+        // Deal out a new card, show value
+        Card newCard = deck.deal();
+        if (check == 0) {
+            System.out.println("You have a " + newCard.getRank());
+        }
+        else {
+            System.out.println("New Card: " + newCard.getRank());
+        }
+        // If they draw an Ace
+        if (newCard.getRank().equals("Ace")) {
+            newCard.setAce(newCard);
+        }
+        newPlayer.addTotal(newCard.getValue());
+        newPlayer.addCard(newCard);
     }
 
     // Goes through each player
@@ -60,18 +83,10 @@ public class Game {
             Player newPlayer = new Player(name, bet);
             players.add(newPlayer);
             // Deal out cards to the player
+            // Create a variable so the drawCard function knows what to print
+            int check = 0;
             for (int j = 0; j < 2; j++) {
-                Card newCard = deck.deal();
-                System.out.println("You have a " + newCard.getRank());
-                // If they draw an Ace
-                if (newCard.getRank().equals("Ace")) {
-                    newCard.setAce(newCard);
-                }
-                // Add card value to their total
-                newPlayer.addTotal(newCard.getValue());
-                // Add card to their hand
-                newPlayer.addCard(newCard);
-                // Print out what card they got
+                drawCard(newPlayer, check);
             }
             // Ask if they want to hit or stand, keep on asking if they input HIT, deal card accordingly
             String choice;
@@ -80,15 +95,8 @@ public class Game {
                 choice = input.nextLine();
                 // If they hit
                 if (choice.equals("HIT")) {
-                    // Deal out a new card, show value
-                    Card newCard = deck.deal();
-                    System.out.println("New Card: " + newCard.getRank());
-                    // If they draw an Ace
-                    if (newCard.getRank().equals("Ace")) {
-                        newCard.setAce(newCard);
-                    }
-                    newPlayer.addTotal(newCard.getValue());
-                    newPlayer.addCard(newCard);
+                    check = 1;
+                    drawCard(newPlayer, check);
                 }
             }
             while (choice.equals("HIT"));
@@ -108,9 +116,6 @@ public class Game {
         }
     }
 
-    // Declare new player as dealer
-    Player dealer = new Player("dealer", 0);
-    int dealerTotal = 0; // ????
     public void dealerWork() {
         // Dealer gets two cards, find total of cards, add cards to dealers hand
         for (int i = 0; i < 2; i++) {
@@ -161,7 +166,7 @@ public class Game {
                     System.out.println(current.getName() + ", nice try, the dealer won! You lost your bet of " + current.getBet() + " dollars :(");
                 }
                 // If the player has more points
-                else if (currentTotal > dealerTotal) {
+                else {
                     current.won();
                     if (currentTotal == 21)
                     {
@@ -188,12 +193,18 @@ public class Game {
         }
     }
 
+    // Function to play game
+    public void playGame() {
+        printInstructions();
+        playerWork();
+        dealerWork();
+        findWinner();
+    }
+
     // Main
     public static void main(String[] args) {
         Game newGame = new Game();
-        printInstructions();
-        newGame.playerWork();
-        newGame.dealerWork();
-        newGame.findWinner();
+        newGame.playGame();
+
     }
 }
