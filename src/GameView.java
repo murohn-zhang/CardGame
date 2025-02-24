@@ -17,30 +17,47 @@ public class GameView extends JFrame {
         this.setVisible(true);
     }
 
+    public void setState(int state) {
+        this.state = state;
+        this.repaint();
+    }
     public void paint(Graphics g) {
-        state = game.getState();
 
-        if (state == 1) {
-//            g.setColor(Color.WHITE);
-//            g.fillRect(0,0, 1200, 900);
-            g.setFont(new Font ("Serif", Font.ITALIC, 50));
-            g.drawString("Welcome to BLACKJACK", 300, 200);
+        if (game.getState() == 1) {
+            paintInstructions(g);
         }
 
-        else if (state == 2) {
-//            g.setColor(Color.WHITE);
-//            g.fillRect(0,0, 1200, 900);
-            g.drawString("Playing Game...", 300, 200);
-            Deck deck = game.getCards();
-            deck.deal().draw(g);
-
+        else if (game.getState() == 2) {
+            paintGame(g);
         }
 
-        else if (state == 3) {
-//            g.setColor(Color.WHITE);
-//            g.fillRect(0,0, 1200, 900);
-            g.drawString("End Page, Winner Winner Chicken Dinner!", 300, 200);
+        else if (game.getState() == 3) {
+            paintEnd(g);
         }
 
+    }
+
+    public void reset(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.fillRect(0,0, 1200, 900);
+        g.setFont(new Font ("Serif", Font.ITALIC, 50));
+        g.setColor(Color.BLACK);
+    }
+
+    public void paintInstructions(Graphics g) {
+        reset(g);
+        g.drawString("Welcome to BLACKJACK", 300, 200);
+    }
+
+    public void paintGame(Graphics g) {
+        reset(g);
+        g.drawString("Playing Game...", 300, 200);
+        Deck deck = game.getCards();
+        deck.deal().draw(g);
+    }
+
+    public void paintEnd(Graphics g) {
+        reset(g);
+        g.drawString("End Page, Winner Winner Chicken Dinner!", 300, 200);
     }
 }

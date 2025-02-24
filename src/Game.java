@@ -27,6 +27,7 @@ public class Game {
         // Declare new player as dealer
         dealer = new Player("dealer", 0);
         dealerTotal = 0;
+        state = 1;
         window.repaint();
 
     }
@@ -84,6 +85,8 @@ public class Game {
             int bet = input.nextInt();
             input.nextLine();
 
+            state = 2;
+            window.repaint();
             // Create a new player from attained info
             Player newPlayer = new Player(name, bet);
             players.add(newPlayer);
@@ -200,10 +203,7 @@ public class Game {
 
     // Function to play game
     public void playGame() {
-        state = 1;
         printInstructions();
-        state = 2;
-        window.repaint();
         playerWork();
         dealerWork();
         state = 3;
