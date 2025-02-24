@@ -22,7 +22,6 @@ public class Game {
     public Game() {
         // Initialize variables, shuffle deck
         players = new ArrayList<Player>();
-        state = 1;
         window = new GameView(this);
         deck = new Deck(ranks, suits, values, window);
         // Declare new player as dealer
@@ -35,6 +34,10 @@ public class Game {
     // Getter for deck
     public Deck getCards() {
         return deck;
+    }
+
+    public int getState() {
+        return state;
     }
 
     // Prints instructions
@@ -147,7 +150,6 @@ public class Game {
 
     // Calculate winner
     public void findWinner() {
-        state = 3;
         // For each player
         int currentTotal;
         for (Player current: players) {
@@ -201,9 +203,11 @@ public class Game {
         state = 1;
         printInstructions();
         state = 2;
+        window.repaint();
         playerWork();
         dealerWork();
         state = 3;
+        window.repaint();
         findWinner();
     }
 
