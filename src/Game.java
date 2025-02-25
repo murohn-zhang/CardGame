@@ -10,6 +10,7 @@ public class Game {
     private Player dealer;
     private int dealerTotal;
     private int state;
+    private Player currentPlayer;
 
     Scanner input = new Scanner(System.in);
     // Create deck w/ assigned values for each card
@@ -32,11 +33,17 @@ public class Game {
 
     }
 
-    // Getter for deck
-    public Deck getCards() {
-        return deck;
+//    // Getter for deck
+//    public Deck getCards() {
+//        return deck;
+//    }
+
+    // Getter for currentPlayer
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
+    // Getter for state
     public int getState() {
         return state;
     }
@@ -85,11 +92,13 @@ public class Game {
             int bet = input.nextInt();
             input.nextLine();
 
-            state = 2;
-            window.repaint();
             // Create a new player from attained info
             Player newPlayer = new Player(name, bet);
             players.add(newPlayer);
+
+            state = 2;
+            currentPlayer = newPlayer;
+            window.repaint();
             // Deal out cards to the player
             // Create a variable so the drawCard function knows what to print
             int check = 0;

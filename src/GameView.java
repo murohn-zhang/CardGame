@@ -6,7 +6,7 @@ public class GameView extends JFrame {
     private final int WINDOW_HEIGHT = 900;
     private final int WINDOW_WIDTH = 1200;
     private final int HEADER_HEIGHT = 23;
-    private int state;
+    private Player player;
 
     public GameView(Game game) {
         this.game = game;
@@ -17,10 +17,6 @@ public class GameView extends JFrame {
         this.setVisible(true);
     }
 
-    public void setState(int state) {
-        this.state = state;
-        this.repaint();
-    }
     public void paint(Graphics g) {
 
         if (game.getState() == 1) {
@@ -52,8 +48,20 @@ public class GameView extends JFrame {
     public void paintGame(Graphics g) {
         reset(g);
         g.drawString("Playing Game...", 300, 200);
-        Deck deck = game.getCards();
-        deck.deal().draw(g);
+        player = game.getCurrentPlayer();
+        // Draw player name and score
+        g.drawString(player.getName(), 450, 50);
+//        g.drawString(player.get)
+        // Draw player hand
+        // Add new Card
+        // Ace?
+
+        // REPAINT:
+        // - every player
+        // - every time a card is drawn (new card and score changes)
+
+        // Deck playerCards = game.getCards();
+        // deck.deal().draw(g, 10, 20); // temporary values
     }
 
     public void paintEnd(Graphics g) {

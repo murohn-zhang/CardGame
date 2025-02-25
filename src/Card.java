@@ -65,8 +65,8 @@ public class Card {
     }
 
     // Have the card draw itself
-    public void draw(Graphics g) {
-        g.drawImage(face, 500, 500, 250, 350, window);
+    public void draw(Graphics g, int xLoc, int yLoc) {
+        g.drawImage(face, xLoc, yLoc, 250, 350, window);
     }
 
 
