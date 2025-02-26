@@ -33,11 +33,6 @@ public class Game {
 
     }
 
-//    // Getter for deck
-//    public Deck getCards() {
-//        return deck;
-//    }
-
     // Getter for currentPlayer
     public Player getCurrentPlayer() {
         return currentPlayer;
@@ -105,6 +100,7 @@ public class Game {
             for (int j = 0; j < 2; j++) {
                 drawCard(newPlayer, check);
             }
+            window.repaint();
             // Ask if they want to hit or stand, keep on asking if they input HIT, deal card accordingly
             String choice;
             do {
@@ -114,6 +110,7 @@ public class Game {
                 if (choice.equals("HIT")) {
                     check = 1;
                     drawCard(newPlayer, check);
+                    window.repaint();
                 }
             }
             while (choice.equals("HIT"));
