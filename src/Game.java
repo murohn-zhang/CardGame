@@ -11,6 +11,8 @@ public class Game {
     private int dealerTotal;
     private int state;
     private Player currentPlayer;
+    private boolean end;
+    private int endState;
 
     Scanner input = new Scanner(System.in);
     // Create deck w/ assigned values for each card
@@ -33,14 +35,21 @@ public class Game {
 
     }
 
-    // Getter for currentPlayer
+    // Getters
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    // Getter for state
     public int getState() {
         return state;
+    }
+
+    public boolean getEnd() {
+        return end;
+    }
+
+    public int getEndState() {
+        return endState;
     }
 
     // Prints instructions
@@ -93,6 +102,7 @@ public class Game {
 
             state = 2;
             currentPlayer = newPlayer;
+            end = false;
             window.repaint();
             // Deal out cards to the player
             // Create a variable so the drawCard function knows what to print
@@ -116,6 +126,8 @@ public class Game {
             while (choice.equals("HIT"));
 
             // Print their total at the end
+            end = true;
+            window.repaint();
             System.out.println(newPlayer.getName() + "'s total is " + newPlayer.getTotal());
             // If it's greater than 21, set eliminated variable to true
             if (newPlayer.getTotal() > 21) {
@@ -160,6 +172,8 @@ public class Game {
     // Calculate winner
     public void findWinner() {
         // For each player
+        state = 3;
+        window.repaint();
         int currentTotal;
         for (Player current: players) {
             currentTotal = current.getTotal();
@@ -168,19 +182,23 @@ public class Game {
 
                 // If both hit a blackjack
                 if (currentTotal == 21 && dealerTotal == 21) {
+                    endState = 1;
                     System.out.println("Both " + current.getName() + " and the dealer hit a BLACKJACK!");
                     System.out.println(current.getName() + ", your score is " + current.getPoints());
                 }
                 // If both have the same score
                 else if (currentTotal == dealerTotal) {
+                    endState = 2;
                     System.out.println(current.getName() + ", you tied with the dealer.");
                 }
                 // If the dealer has more points
                 else if (currentTotal < dealerTotal) {
+                    endState = 3;
                     System.out.println(current.getName() + ", nice try, the dealer won! You lost your bet of " + current.getBet() + " dollars :(");
                 }
                 // If the player has more points
                 else {
+                    endState = 4;
                     current.won();
                     if (currentTotal == 21)
                     {
@@ -192,16 +210,19 @@ public class Game {
 
             // If one of them is eliminated
             else if (!current.isEliminated() && dealer.isEliminated()) {
+                endState = 5;
                 current.won();
                 System.out.println(current.getName() + ", you beat the dealer! Your score is " + current.getPoints());
             }
 
             else if (current.isEliminated() && !dealer.isEliminated()) {
+                endState = 6;
                 System.out.println(current.getName() + ", nice try, the dealer won! You lost your bet of " + current.getBet() + " dollars :(");
             }
 
             // If both are eliminated
             else if (current.isEliminated() && dealer.isEliminated()) {
+                endState = 7;
                 System.out.println("Both " + current.getName() + " and the dealer BUSTED :(");
             }
         }
@@ -212,8 +233,6 @@ public class Game {
         printInstructions();
         playerWork();
         dealerWork();
-        state = 3;
-        window.repaint();
         findWinner();
     }
 
