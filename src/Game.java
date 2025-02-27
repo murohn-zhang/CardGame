@@ -30,6 +30,7 @@ public class Game {
         // Declare new player as dealer
         dealer = new Player("dealer", 0);
         dealerTotal = 0;
+        // Initialize first window
         state = 1;
         window.repaint();
 
@@ -40,14 +41,24 @@ public class Game {
         return currentPlayer;
     }
 
+    public int getDealerTotal() {
+        return dealerTotal;
+    }
+
     public int getState() {
         return state;
     }
 
+    // End tells window when to add result statement
     public boolean getEnd() {
         return end;
     }
 
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    // Tells window which final result statement to show
     public int getEndState() {
         return endState;
     }
@@ -172,8 +183,6 @@ public class Game {
     // Calculate winner
     public void findWinner() {
         // For each player
-        state = 3;
-        window.repaint();
         int currentTotal;
         for (Player current: players) {
             currentTotal = current.getTotal();
@@ -210,21 +219,23 @@ public class Game {
 
             // If one of them is eliminated
             else if (!current.isEliminated() && dealer.isEliminated()) {
-                endState = 5;
+                endState = 4;
                 current.won();
                 System.out.println(current.getName() + ", you beat the dealer! Your score is " + current.getPoints());
             }
 
             else if (current.isEliminated() && !dealer.isEliminated()) {
-                endState = 6;
+                endState = 3;
                 System.out.println(current.getName() + ", nice try, the dealer won! You lost your bet of " + current.getBet() + " dollars :(");
             }
 
             // If both are eliminated
             else if (current.isEliminated() && dealer.isEliminated()) {
-                endState = 7;
+                endState = 5;
                 System.out.println("Both " + current.getName() + " and the dealer BUSTED :(");
             }
+            state = 3;
+            window.repaint();
         }
     }
 
